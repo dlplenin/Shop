@@ -12,6 +12,7 @@ using Shop.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Shop.Web.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Shop.Web.Helpers;
 
 namespace Shop.Web
 {
@@ -47,6 +48,7 @@ namespace Shop.Web
 
             services.AddTransient<SeedDb>();
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IUserHelper, UserHelper>();
 
             services.AddControllersWithViews();
         }
