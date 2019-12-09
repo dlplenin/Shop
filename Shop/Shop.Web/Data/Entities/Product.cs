@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Shop.Web.Data.Entities
         [Required]
         public string Name { get; set; }
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
@@ -28,5 +30,7 @@ namespace Shop.Web.Data.Entities
 
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
         public double Stock { get; set; }
+
+        public User User { get; set; }
     }
 }
