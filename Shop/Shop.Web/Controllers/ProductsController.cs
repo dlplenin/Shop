@@ -58,7 +58,7 @@ namespace Shop.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,LastPurchase,LastSale,IsAvailabe,Stock,ImageFile")] ProductViewModel productView)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImageUrl,LastPurchase,LastSale,IsAvailabe,Stock,ImageFile")] ProductViewModel productView)
         {
             if (ModelState.IsValid)
             {
@@ -119,7 +119,26 @@ namespace Shop.Web.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+
+            var productView = this.ToProducViewModel(product);
+            return View(productView);
+        }
+
+        private ProductViewModel ToProducViewModel(Product product)
+        {
+            return new ProductViewModel
+            {
+                Id = product.Id,
+                ImageUrl = product.ImageUrl,
+                IsAvailabe = product.IsAvailabe,
+                LastPurchase = product.LastPurchase,
+                LastSale = product.LastSale,
+                Name = product.Name,
+                Price = product.Price,
+                Stock = product.Stock,
+                User = product.User
+            };
+
         }
 
         // POST: Products/Edit/5
@@ -127,9 +146,9 @@ namespace Shop.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImageUrl,LastPurchase,LastSale,IsAvailabe,Stock")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImageUrl,ImageFile,LastPurchase,LastSale,IsAvailabe,Stock")] ProductViewModel productView)
         {
-            if (id != product.Id)
+            if (id != productView.Id)
             {
                 return NotFound();
             }
@@ -138,13 +157,30 @@ namespace Shop.Web.Controllers
             {
                 try
                 {
+                    var path = productView.ImageUrl;
+
+                    if (productView.ImageFile != null && productView.ImageFile.Length > 0)
+                    {
+                        path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Products", productView.ImageFile.FileName);
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await productView.ImageFile.CopyToAsync(stream);
+                        }
+
+                        path = $"~/images/Products/{productView.ImageFile.FileName}";
+                    }
+
+
                     // TODO: Pending to change to: this.User.Identity.Name
-                    product.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                    productView.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                    var product = this.ToProduct(productView, path);
+
                     await productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await productRepository.ExistAsync(product.Id))
+                    if (!await productRepository.ExistAsync(productView.Id))
                     {
                         return NotFound();
                     }
@@ -155,7 +191,7 @@ namespace Shop.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productView);
         }
 
         // GET: Products/Delete/5
