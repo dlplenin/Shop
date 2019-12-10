@@ -7,33 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Web.Data;
 using Shop.Web.Data.Entities;
+using Shop.Web.Helpers;
 
 namespace Shop.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IProductRepository productRepository;
+        private readonly IUserHelper userHelper;
 
-        public ProductsController(IRepository repository)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
         {
-            _repository = repository;
+            this.productRepository = productRepository;
+            this.userHelper = userHelper;
         }
 
         // GET: Products
         public IActionResult Index()
         {
-            return View(_repository.GetProducts());
+            return View(productRepository.GetAll());
         }
 
         // GET: Products/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -57,22 +60,23 @@ namespace Shop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.AddProduct(product);
-                await _repository.SaveAllAsync();
+                // TODO: Pending to change to: this.User.Identity.Name
+                product.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                await productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
         // GET: Products/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -96,12 +100,13 @@ namespace Shop.Web.Controllers
             {
                 try
                 {
-                    _repository.UpdateProduct(product);
-                    await _repository.SaveAllAsync();
+                    // TODO: Pending to change to: this.User.Identity.Name
+                    product.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                    await productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_repository.ProductExists(product.Id))
+                    if (!await productRepository.ExistAsync(product.Id))
                     {
                         return NotFound();
                     }
@@ -116,14 +121,14 @@ namespace Shop.Web.Controllers
         }
 
         // GET: Products/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -137,9 +142,8 @@ namespace Shop.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = _repository.GetProduct(id);
-            _repository.RemoveProduct(product);
-            await _repository.SaveAllAsync();
+            var product = await productRepository.GetByIdAsync(id);
+            await productRepository.DeleteAsync(product);
             return RedirectToAction(nameof(Index));
         }
     }
