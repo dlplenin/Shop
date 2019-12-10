@@ -35,5 +35,20 @@ namespace Shop.Web.Data.Entities
         public double Stock { get; set; }
 
         public User User { get; set; }
+        public string ImageUrlFullPath 
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.ImageUrl))
+                {
+                    return null;
+                }
+
+
+                return $"https://shopiste.azurewebsites.net{this.ImageUrl.Substring(1)}";
+            }
+
+        }
+
     }
 }
