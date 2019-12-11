@@ -20,7 +20,7 @@ namespace Shop.Web.Controllers.API
         [HttpGet]
         public IActionResult GetProducts()
         {
-            var products = this.productRepository.GetAllWithUsers().AsQueryable().OrderBy(x => x.Name);
+            var products = this.productRepository.GetAllWithUsers().OrderBy(x => x.Name);
   
             return this.Ok(products);
         }
