@@ -20,10 +20,10 @@ namespace Shop.Common.Models
 		public string ImageUrl { get; set; }
 
 		[JsonProperty("lastPurchase")]
-		public DateTime LastPurchase { get; set; }
+		public DateTime? LastPurchase { get; set; }
 
 		[JsonProperty("lastSale")]
-		public DateTime LastSale { get; set; }
+		public DateTime? LastSale { get; set; }
 
 		[JsonProperty("isAvailabe")]
 		public bool IsAvailabe { get; set; }

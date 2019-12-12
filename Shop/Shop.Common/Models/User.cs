@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Shop.Common.Models
 {
-    public class User
-    {
+	public class User
+	{
 		[JsonProperty("firstName")]
 		public string FirstName { get; set; }
 
