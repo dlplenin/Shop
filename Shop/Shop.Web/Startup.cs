@@ -16,6 +16,7 @@ using Shop.Web.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Shop.Web.Data.Repositories;
 
 namespace Shop.Web
 {
@@ -52,6 +53,7 @@ namespace Shop.Web
             services.AddTransient<SeedDb>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IUserHelper, UserHelper>();
 
             services.AddControllersWithViews();

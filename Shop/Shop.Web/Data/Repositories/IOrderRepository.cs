@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Shop.Web.Data.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Shop.Web.Data.Repositories
 {
-    interface IOrderRepository
-    {
-    }
+	public interface IOrderRepository : IGenericRepository<Order>
+	{
+		Task<IQueryable<Order>> GetOrdersAsync(string userName);
+	}
+
 }
