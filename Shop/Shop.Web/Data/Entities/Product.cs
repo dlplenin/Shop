@@ -35,7 +35,7 @@ namespace Shop.Web.Data.Entities
         public double Stock { get; set; }
 
         public User User { get; set; }
-        public string ImageUrlFullPath 
+        public string ImageFullPath 
         {
             get
             {
