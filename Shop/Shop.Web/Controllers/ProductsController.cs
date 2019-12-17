@@ -87,8 +87,7 @@ namespace Shop.Web.Controllers
 
                 var product = ToProduct(productView, path);
 
-                // TODO: Pending to change to: this.User.Identity.Name
-                product.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                product.User = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
@@ -184,8 +183,7 @@ namespace Shop.Web.Controllers
                     }
 
 
-                    // TODO: Pending to change to: this.User.Identity.Name
-                    productView.User = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
+                    productView.User = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     var product = this.ToProduct(productView, path);
 
                     await productRepository.UpdateAsync(product);
