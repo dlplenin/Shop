@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Shop.Web.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace Shop.Web
 {
@@ -55,6 +56,11 @@ namespace Shop.Web
 
             services.AddControllersWithViews();
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
             services.AddAuthentication()
             .AddCookie()
@@ -66,6 +72,12 @@ namespace Shop.Web
                     ValidAudience = this.Configuration["Tokens:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
                 };
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
         }
@@ -83,6 +95,10 @@ namespace Shop.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Error404
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
