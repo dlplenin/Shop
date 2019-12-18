@@ -27,8 +27,36 @@ namespace Shop.Web.Data
             await this.userHelper.CheckRoleAsync("Admin");
             await this.userHelper.CheckRoleAsync("Customer");
 
-            // Add user
+            if (!this.context.Countries.Any())
+            {
+                var cities = new List<City>
+                {
+                    new City { Name = "Medellín" },
+                    new City { Name = "Bogotá" },
+                    new City { Name = "Calí" }
+                };
 
+                this.context.Countries.Add(new Country
+                {
+                    Cities = cities,
+                    Name = "Colombia"
+                });
+
+                this.context.Countries.Add(new Country
+                {
+                    Cities = new List<City>
+                    {
+                        new City { Name = "Quito" },
+                        new City { Name = "Guayaquil" },
+                        new City { Name = "Cuenca" }
+                    },
+                    Name = "Ecuador"
+                });
+
+                await this.context.SaveChangesAsync();
+            }
+
+            // Add user
             var user = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
             if (user == null)
             {
@@ -38,7 +66,12 @@ namespace Shop.Web.Data
                     LastName = "Pardo",
                     Email = "dp@gmail.com",
                     UserName = "dp@gmail.com",
-                    PhoneNumber = "098"
+                    PhoneNumber = "098",
+                    Address = "Calle Luna Calle Sol",
+                    CityId = this.context.Countries.FirstOrDefault().Cities.Where(x=>x.Name=="Quito").FirstOrDefault().Id,
+                    City = this.context.Countries.FirstOrDefault().Cities.Where(x => x.Name == "Quito").FirstOrDefault()
+
+
                 };
 
                 var result = await this.userHelper.AddUserAsync(user, "123456");

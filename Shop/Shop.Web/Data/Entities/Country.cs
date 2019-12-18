@@ -15,5 +15,10 @@ namespace Shop.Web.Data.Entities
 		[Display(Name = "Country")]
 		public string Name { get; set; }
 
+		public ICollection<City> Cities { get; set; }
+
+		[Display(Name = "# Cities")]
+		public int NumberCities { get { return this.Cities == null ? 0 : this.Cities.Count; } }
+
 	}
 }
