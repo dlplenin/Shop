@@ -59,5 +59,20 @@ namespace Shop.Web.Data.Entities
 				return this.OrderDate.ToLocalTime();
 			}
 		}
+
+		[Display(Name = "Delivery date")]
+		[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
+		public DateTime? DeliveryDateLocal
+		{
+			get
+			{
+				if (this.DeliveryDate == null)
+				{
+					return null;
+				}
+
+				return this.DeliveryDate?.ToLocalTime();
+			}
+		}
 	}
 }

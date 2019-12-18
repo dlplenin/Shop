@@ -31,6 +31,7 @@ namespace Shop.Web.Data.Repositories
             if (await this.userHelper.IsUserInRoleAsync(user, "Admin"))
             {
                 return this.context.Orders
+                    .Include(o => o.User)
                     .Include(o => o.Items)
                     .ThenInclude(i => i.Product)
                     .OrderByDescending(o => o.OrderDate);
