@@ -24,19 +24,32 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" type="file"/>
+                <input asp-for="ImageFile" class="form-control" type="file" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastPurchase" class="control-label"></label>
-                <input asp-for="LastPurchase" class="form-control" />
+                <div class="input-group date" data-provide="datepicker">
+                    <input asp-for="LastPurchase" class="form-control" type="text" />
+                    <span class="input-group-addon">
+                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                    </span>
+                </div>
                 <span asp-validation-for="LastPurchase" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="LastSale" class="control-label"></label>
-                <input asp-for="LastSale" class="form-control" />
+                <div class="input-group date" data-provide="datepicker">
+                    <input asp-for="LastSale" class="form-control" type="text" />
+                    <span class="input-group-addon">
+                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                    </span>
+                </div>
                 <span asp-validation-for="LastSale" class="text-danger"></span>
             </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsAvailabe" /> @Html.DisplayNameFor(model => model.IsAvailabe)

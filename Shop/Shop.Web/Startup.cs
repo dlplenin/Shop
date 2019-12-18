@@ -82,6 +82,10 @@ namespace Shop.Web
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
+            #if UseRazorCompilation
+            services.AddMvcRazorRuntimeCompilation();
+            #endif
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
