@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Shop.Web.Data.Entities;
 using Shop.Web.Helpers;
 using System;
@@ -60,6 +61,14 @@ namespace Shop.Web.Data
             var user = await this.userHelper.GetUserByEmailAsync("dp@gmail.com");
             if (user == null)
             {
+                var city = this.context.Countries
+                    .Include(c => c.Cities)
+                    .Where(x => x.Name == "Ecuador")
+                    .FirstOrDefault()
+                    .Cities
+                    .Where(x => x.Name == "Quito")
+                    .FirstOrDefault();
+
                 user = new User
                 {
                     FirstName = "Diego",
@@ -68,8 +77,8 @@ namespace Shop.Web.Data
                     UserName = "dp@gmail.com",
                     PhoneNumber = "098",
                     Address = "Calle Luna Calle Sol",
-                    CityId = this.context.Countries.FirstOrDefault().Cities.Where(x=>x.Name=="Quito").FirstOrDefault().Id,
-                    City = this.context.Countries.FirstOrDefault().Cities.Where(x => x.Name == "Quito").FirstOrDefault()
+                    CityId = city.Id,
+                    City = city
 
 
                 };

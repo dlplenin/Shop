@@ -31,7 +31,7 @@ namespace Shop.Web.Controllers
             }
 
             var countryId = await this.countryRepository.DeleteCityAsync(city);
-            return this.RedirectToAction($"Details/{countryId}");
+            return this.RedirectToAction("Details", new { id = countryId });
         }
 
         public async Task<IActionResult> EditCity(int? id)
@@ -58,7 +58,7 @@ namespace Shop.Web.Controllers
                 var countryId = await this.countryRepository.UpdateCityAsync(city);
                 if (countryId != 0)
                 {
-                    return this.RedirectToAction($"Details/{countryId}");
+                    return this.RedirectToAction("Details", new { id = countryId });
                 }
             }
 
@@ -88,7 +88,7 @@ namespace Shop.Web.Controllers
             if (this.ModelState.IsValid)
             {
                 await this.countryRepository.AddCityAsync(model);
-                return this.RedirectToAction($"Details/{model.CountryId}");
+                return this.RedirectToAction("Details", new { id = model.CountryId });
             }
 
             return this.View(model);
