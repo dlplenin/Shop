@@ -2,8 +2,10 @@
 {
     using Entities;
     using Helpers;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -11,12 +13,14 @@
     {
         private readonly DataContext context;
         private readonly IUserHelper userHelper;
+        private readonly IWebHostEnvironment host;
         private readonly Random random;
 
-        public SeedDb(DataContext context, IUserHelper userHelper)
+        public SeedDb(DataContext context, IUserHelper userHelper, IWebHostEnvironment host)
         {
             this.context = context;
             this.userHelper = userHelper;
+            this.host = host;
             this.random = new Random();
         }
 
@@ -136,6 +140,10 @@
 
         private void AddProduct(string name, decimal price, User user)
         {
+            var relativePath = $"~/images/Products/{name}.png";
+            var absolutePath = $"{host.WebRootPath}\\images\\products\\{name}.png";
+            var imageURL = File.Exists(absolutePath) ? relativePath : $"~/images/image-not-available.png";
+
             this.context.Products.Add(new Product
             {
                 Name = name,
@@ -143,7 +151,7 @@
                 IsAvailabe = true,
                 Stock = this.random.Next(100),
                 User = user,
-                ImageUrl = $"~/images/Products/{name}.png"
+                ImageUrl = imageURL
             });
         }
     }
