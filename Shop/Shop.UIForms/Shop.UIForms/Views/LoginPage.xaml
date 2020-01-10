@@ -9,7 +9,12 @@
              Title="Login">
     <ContentPage.Content>
         <ScrollView BindingContext="{Binding Login}">
-            <StackLayout Padding="8">
+            <StackLayout Padding="10">
+                <Image
+                	HeightRequest="150"
+                	Source="shop">
+                </Image>
+
                 <Label Text="Email">
                 </Label>
                 <Entry
@@ -27,13 +32,18 @@
                 </Entry>
 
                 <ActivityIndicator
-                	IsRunning="{Binding IsRunning}">
+                	IsRunning="{Binding IsRunning}"
+                    VerticalOptions="CenterAndExpand">
                 </ActivityIndicator>
 
                 <Button
-                    Command="{Binding LoginCommand}"
-                    IsEnabled="{Binding IsEnabled}"
-                    Text="Login">
+                	BackgroundColor="Navy"
+                	BorderRadius="23"
+                	Command="{Binding LoginCommand}"
+                	HeightRequest="46"
+                	IsEnabled="{Binding IsEnabled}"
+                	Text="Login"
+                	TextColor="White">
                 </Button>
             </StackLayout>
         </ScrollView>
