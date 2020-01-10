@@ -80,8 +80,8 @@ namespace Shop.UIForms.ViewModels
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = token;
             mainViewModel.Products = new ProductsViewModel();
-            await Application.Current.MainPage.Navigation.PushAsync(new ProductsPage());
-
+            //await Application.Current.MainPage.Navigation.PushAsync(new ProductsPage());
+            Application.Current.MainPage = new MasterPage();
 
             //if (!this.Email.Equals("dp@gmail.com") || !this.Password.Equals("123456"))
             //{
